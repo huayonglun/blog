@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>jQuery File Upload Example</title>
+<link href="static/css/bootstrap.min.css" rel="stylesheet">
+	<link href="static/css/resource.css" rel="stylesheet">
+	<link href='static/css/upload.css' rel='stylesheet'>
+	
+	<script src="static/js/jquery.min.js"></script>
+	<script src="static/js/bootstrap.min.js"></script>
+	<script src="dwr/engine.js"></script>
+	<script src="dwr/interface/ResourceTypeManager.js"></script>
+	<script src="dwr/interface/ResourceManager.js"></script>
+	<script src='dwr/interface/UserManager.js'></script>
+	<script src="static/js/resource-manage.js"></script>
+	<script src="static/js/jquery.ui.widget.js"></script>
+	<script src="static/js/jquery.iframe-transport.js"></script>
+	<script src="static/js/jquery.fileupload.js"></script>
+</head>
+<body>
+<div style="text-align:center;background-color:red" > 
+<table border="1" cellpadding="3" cellspacing="0" style="width: 60%;margin:auto"> 
+<tr><td>a</td> </tr> 
+<tr><td>a</td> </tr> 
+</table></div> 
+<input id="fileupload" type="file" name="files[]" multiple>
+	
+<script>
+$(function () {
+	$(function(){
+		$("input[type=file]").change(function(){$(this).parents(".uploader").find(".filename").val($(this).val());});
+		$("input[type=file]").each(function(){
+		if($(this).val()==""){$(this).parents(".uploader").find(".filename").val("请添加文件");}
+		});
+	});
+    $('#fileupload').fileupload({
+    	url:'ResourceServlet?task=uploadResource',
+    	
+    	//dataType: 'json',
+    	autoUpload: true,
+        add: function (e, data) {
+            data.context = $('<button/>').text('Upload')
+                .appendTo(document.body)
+                .click(function () {
+                    data.context = $('<p/>').text('Uploading...').replaceAll($(this));
+                    data.submit();
+                });
+        },
+        done: function (e, data) {
+            data.context.text('Upload finished.');
+            console.log(data);
+        }
+    });
+});
+
+
+</script>
+</body> 
+</html>
